@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include "lista.h"
 
-No* no(char valor, No* proximo_no){
-    No* no = malloc(sizeof(No));
-    no->valor = valor;
-    no->proximo_no = proximo_no;
-    return no;
+No* no(float valor, No* proximo_no) {
+    No* novo_no = malloc(sizeof(No));
+    novo_no->valor = valor;
+    novo_no->proximo_no = proximo_no;
+    return novo_no;
 }
+
 
 void lista_inserir_no(No* L, No* no){
     if(L != NULL){
@@ -18,6 +19,33 @@ void lista_inserir_no(No* L, No* no){
             lista_inserir_no(L->proximo_no, no);
         }
     }
+}
+
+void lista_inserir_no_ordenado(No* L, No* no) {
+    if (L == NULL) {
+        return;
+    }
+
+    if (no->valor < L->valor) {
+        no->proximo_no = L;
+        return;
+    }
+
+    No* anterior = L;
+    No* atual = L->proximo_no;
+
+    while (atual != NULL) {
+        if (no->valor < atual->valor) {
+            anterior->proximo_no = no;
+            no->proximo_no = atual;
+            return;
+        }
+
+        anterior = atual;
+        atual = atual->proximo_no;
+    }
+
+    anterior->proximo_no = no;
 }
 
 void lista_imprimir(No* L){
@@ -36,17 +64,17 @@ int lista_quantidade_nos(No* L){
 
 No* lista_copiar(No* L) {
     if (L == NULL) {
-        return NULL; // Retorna uma lista vazia
+        return NULL; 
     }
 
-    No* copia = no(L->valor, NULL); // Cria o primeiro nó da cópia
+    No* copia = no(L->valor, NULL); 
     No* atual = copia;
-    L = L->proximo_no; // Avança o ponteiro da lista original
+    L = L->proximo_no; 
 
     while (L != NULL) {
-        atual->proximo_no = no(L->valor, NULL); // Cria um novo nó na cópia
-        L = L->proximo_no; // Avança na lista original
-        atual = atual->proximo_no; // Avança na lista de cópia
+        atual->proximo_no = no(L->valor, NULL); 
+        L = L->proximo_no; 
+        atual = atual->proximo_no; 
     }
 
     return copia;
